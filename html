@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Menu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --discord: #5865F2;
+            --roblox: #000000;
+            --youtube: #FF0000;
+            --instagram: #E1306C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #aaa;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .menu-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            border: none;
+            font-size: 1.8rem;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-btn.discord { background: var(--discord); }
+        .menu-btn.roblox { background: var(--roblox); border: 1px solid #444; }
+        .menu-btn.youtube { background: var(--youtube); }
+        .menu-btn.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+
+        .info-box {
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .platform-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .label {
+            font-weight: 500;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .value {
+            font-weight: bold;
+            font-size: 1rem;
+            word-break: break-all;
+            color: #fff;
+            user-select: all;           /* easy manual selection */
+            -webkit-user-select: all;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            border-radius: 50px;
+            padding: 0.4rem 1rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .copied-feedback {
+            color: #a0ffa0;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .copied-feedback.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✦ SOCIAL MENU ✦</h1>
+        <p class="subtitle">Select a platform to view &amp; copy</p>
+
+        <div class="menu">
+            <button class="menu-btn discord" onclick="showInfo('discord')" title="Discord">
+                <i class="fab fa-discord"></i>
+            </button>
+            <button class="menu-btn roblox" onclick="showInfo('roblox')" title="Roblox">
+                <i class="fas fa-gamepad"></i>
+            </button>
+            <button class="menu-btn youtube" onclick="showInfo('youtube')" title="YouTube">
+                <i class="fab fa-youtube"></i>
+            </button>
+            <button class="menu-btn instagram" onclick="showInfo('instagram')" title="Instagram">
+                <i class="fab fa-instagram"></i>
+            </button>
+        </div>
+
+        <div id="infoBox" class="info-box">
+            <div class="platform-name" id="platformTitle"></div>
+            <div class="detail-row">
+                <span class="label" id="dataLabel"></span>
+                <span class="value" id="dataValue"></span>
+                <button class="copy-btn" id="copyButton">
+                    <i class="fas fa-copy"></i> Copy
+                </button>
+            </div>
+            <div class="copied-feedback" id="copiedMsg">✓ Copied to clipboard!</div>
+        </div>
+    </div>
+
+    <script>
+        const socialData = {
+            discord: {
+                name: "Discord",
+                icon: '<i class="fab fa-discord" style="color:#5865F2;"></i>',
+                label: "Username",
+                value: "KrisXxXLL_Pizza_37874"
+            },
+            roblox: {
+                name: "Roblox",
+                icon: '<i class="fas fa-gamepad" style="color:#000;"></i>',
+                label: "Username",
+                value: "KrisXxXLL"
+            },
+            youtube: {
+                name: "YouTube",
+                icon: '<i class="fab fa-youtube" style="color:#FF0000;"></i>',
+                label: "Link",
+                value: "https://m.youtube.com/channel/UCuVbz_b0eBlL1_4rWS8C2Kw"
+            },
+            instagram: {
+                name: "Instagram",
+                icon: '<i class="fab fa-instagram" style="color:#E1306C;"></i>',
+                label: "Username",
+                value: "krisxxllmain"
+            }
+        };
+
+        let currentCopyText = "";
+
+        function showInfo(platform) {
+            const data = socialData[platform];
+            if (!data) return;
+
+            document.getElementById("platformTitle").innerHTML = data.icon + " " + data.name;
+            document.getElementById("dataLabel").textContent = data.label + ":";
+            document.getElementById("dataValue").textContent = data.value;
+            currentCopyText = data.value;
+
+            document.getElementById("infoBox").style.display = "block";
+            document.getElementById("copiedMsg").classList.remove("show");
+        }
+
+        // Robust copy function with multiple fallbacks
+        async function copyToClipboard(text) {
+            // Try modern Clipboard API
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return true;
+                } catch (err) {
+                    // Clipboard API failed – fall through to execCommand
+                }
+            }
+
+            // Fallback: textarea + execCommand
+            return new Promise((resolve) => {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                textArea.style.top = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+
+                let success = false;
+                try {
+                    success = document.execCommand('copy');
+                } catch (err) {
+                    // ignore
+                }
+
+                document.body.removeChild(textArea);
+
+                if (success) {
+                    resolve(true);
+                } else {
+                    // Last resort: select the visible text and tell the user to Ctrl+C
+                    const valueSpan = document.getElementById("dataValue");
+                    if (valueSpan) {
+                        const range = document.createRange();
+                        range.selectNode(valueSpan);
+                        window.getSelection().removeAllRanges();
+                        window.getSelection().addRange(range);
+                        alert("Automatic copy didn't work. The text is now selected – press Ctrl+C (or Cmd+C) to copy it.");
+                    } else {
+                        alert("Copy failed. Please copy manually: " + text);
+                    }
+                    resolve(false);
+                }
+            });
+        }
+
+        async function handleCopy() {
+            if (!currentCopyText) return;
+
+            const success = await copyToClipboard(currentCopyText);
+            const feedback = document.getElementById("copiedMsg");
+
+            if (success) {
+                feedback.classList.add("show");
+                setTimeout(() => feedback.classList.remove("show"), 2000);
+            }
+            // If manual fallback occurred, the alert already handled it
+        }
+
+        document.getElementById("copyButton").addEventListener("click", handleCopy);
+    </script>
+</body>
+</html>
